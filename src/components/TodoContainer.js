@@ -2,26 +2,10 @@ import React from "react";
 import Header from "./Header";
 import InputTodo from "./InputTodo";
 import TodosList from "./TodosList";
-import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 class TodoContainer extends React.Component {
   state = {
-    todos: [
-      {
-        id: uuidv4(),
-        title: "Create a react app",
-        completed: true,
-      },
-      {
-        id: uuidv4(),
-        title: "Learn react",
-        completed: true,
-      },
-      {
-        id: uuidv4(),
-        title: "Do the dishes",
-        completed: false,
-      },
-    ],
+    todos: [],
   };
   handleChange = (id) => {
     //This code isnt how its supose to be done but its in there since the code below isnt working properly
@@ -45,24 +29,35 @@ class TodoContainer extends React.Component {
     // }));
   };
   delTodo = (id) => {
-    this.setState({
-      todos: [
-        ...this.state.todos.filter((todo) => {
-          return todo.id !== id;
-        }),
-      ],
-    });
+    axios
+      .delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then((reponse) =>
+        this.setState({
+          todos: [
+            ...this.state.todos.filter((todo) => {
+              return todo.id !== id;
+            }),
+          ],
+        })
+      );
   };
   addTodoItem = (title) => {
-    const newTodo = {
-      id: uuidv4(),
-      title: title,
-      completed: false,
-    };
-    this.setState({
-      todos: [...this.state.todos, newTodo],
-    });
+    axios
+      .post("https://jsonplaceholder.typicode.com/todos", {
+        title: title,
+        completed: false,
+      })
+      .then((response) =>
+        this.setState({
+          todos: [...this.state.todos, response.data],
+        })
+      );
   };
+  componentDidMount() {
+    axios
+      .get("https://jsonplaceholder.typicode.com/todos?_limit=10")
+      .then((response) => this.setState({ todos: response.data }));
+  }
   render() {
     return (
       <div className="container">
