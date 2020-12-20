@@ -7,31 +7,21 @@ class TodoContainer extends React.Component {
   state = {
     todos: [
       {
-        id: 1,
+        id: uuidv4(),
         title: "Create a react app",
         completed: true,
       },
       {
-        id: 2,
+        id: uuidv4(),
         title: "Learn react",
         completed: true,
       },
       {
-        id: 3,
+        id: uuidv4(),
         title: "Do the dishes",
         completed: false,
       },
     ],
-  };
-  handleChange = (id) => {
-    this.setState((prevState) => ({
-      todos: prevState.todos.map((todo) => {
-        if (todo.id == id) {
-          todo.completed = !todo.completed;
-        }
-        return todo;
-      }),
-    }));
   };
   delTodo = (id) => {
     this.setState({
@@ -54,7 +44,7 @@ class TodoContainer extends React.Component {
   };
   render() {
     return (
-      <div>
+      <div className="container">
         <Header />
         <InputTodo addTodoProps={this.addTodoItem} />
         <TodosList
@@ -65,5 +55,16 @@ class TodoContainer extends React.Component {
       </div>
     );
   }
+  handleChange = (id) => {
+    this.setState((prevState) => ({
+      todos: prevState.todos.map((todo) => {
+        if (todo.id == id) {
+          todo.completed = !todo.completed;
+          console.log(id);
+        }
+        return todo;
+      }),
+    }));
+  };
 }
 export default TodoContainer;
