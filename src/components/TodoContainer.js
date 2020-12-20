@@ -6,27 +6,18 @@ import axios from "axios";
 class TodoContainer extends React.Component {
   state = {
     todos: [],
+    show: false,
   };
   handleChange = (id) => {
-    //This code isnt how its supose to be done but its in there since the code below isnt working properly
     this.setState({
-      todos: [
-        ...this.state.todos.map((todo) => {
-          if (todo.id === id) {
-            todo.completed = !todo.completed;
-          }
-          return todo;
-        }),
-      ],
+      todos: this.state.todos.map((todo) => {
+        if (todo.id === id) {
+          todo.completed = !todo.completed;
+        }
+        return todo;
+      }),
+      show: !this.state.show,
     });
-    // this.setState((prevState) => ({
-    //   todos: prevState.todos.map((todo) => {
-    //     if (todo.id === id) {
-    //       todo.completed = !todo.completed;
-    //     }
-    //     return todo;
-    //   }),
-    // }));
   };
   delTodo = (id) => {
     axios
@@ -61,7 +52,7 @@ class TodoContainer extends React.Component {
   render() {
     return (
       <div className="container">
-        <Header />
+        <Header headerSpan={this.state.show} />
         <InputTodo addTodoProps={this.addTodoItem} />
         <TodosList
           todos={this.state.todos}
